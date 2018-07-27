@@ -29,7 +29,10 @@
         <!-- DataTables -->
         <link rel="stylesheet" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     @endif
+    @if(config('adminlte.plugins.texteditor'))
+        <!--texteditor -->
 
+    @endif
     @yield('adminlte_css')
 
     <!--[if lt IE 9]>

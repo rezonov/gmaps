@@ -21,5 +21,17 @@ Route::get('/cat/delete/{id}', 'CatalogController@delete');
 Route::get('/cat_objects/{id}', 'CatalogController@catalog_objects');
 Route::resource('object', 'ObjectController');
 Route::get('/home', 'HomeController@index');
-Route::get('/daughterrun', 'DautghterController@RecordData');
-Route::get('/daughter/acf/{id}', 'DautghterController@ch_acf');
+/*Дочерние сайты*/
+
+Route::get('/daughters/', 'DaughterController@index');
+Route::get('/daughters/edit/{id}', 'DaughterController@edit');
+Route::get('/daughterrun', 'DaughterController@RecordData');
+Route::get('/daughters/add', 'DaughterController@create_daughters');
+Route::get('/daughter/acf/{id}', 'DaughterController@ch_acf');
+
+Route::post('/daughters/add', 'DaughterController@save_daughters');
+Route::post('/daughters/edit/{id}', 'DaughterController@save_daughters');
+Route::get('/daughters/{id}/template/{template}', 'DaughterController@templates');
+Route::get('/daughters/control/{id}', 'DaughterController@control');
+/*----------*/
+Route::get('templates', 'DaughterController@templates');

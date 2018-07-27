@@ -120,7 +120,22 @@ return [
             'icon'        => 'file',
 
             'label_color' => 'success',
-        ]
+        ],
+        [
+            'text'        => 'Показать шаблоны',
+            'url'         => 'templates',
+            'icon'        => 'file',
+
+            'label_color' => 'success',
+        ],
+        [
+            'text'        => 'Дочерние сайты',
+            'url'         => 'daughters',
+            'icon'        => 'female',
+
+            'label_color' => 'success',
+        ],
+
 
     ],
 
@@ -159,5 +174,6 @@ return [
         'datatables' => true,
         'select2'    => true,
         'chartjs'    => true,
+        'texteditor' => true,
     ],
 ];
