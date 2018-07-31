@@ -17,10 +17,6 @@
                     <td><input type="text" name="name" class="form-control" value="{{$data->name}}" /></td>
                 </tr>
                 <tr>
-                    <td><label>Название</label></td>
-                    <td><input type="text" name="name" class="form-control" value="{{$data->name}}" /></td>
-                </tr>
-                <tr>
                     <td colspan="2"><button type="button" class="btn btn-primary">Сохранить</button></td>
                 </tr>
                 </tbody>

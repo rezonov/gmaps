@@ -108,32 +108,85 @@ return [
     */
 
     'menu' => [
-        'MAIN NAVIGATION',
+        'Главная навигация',
         [
             'text' => 'Blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
+            'url' => 'admin/blog',
+            'can' => 'manage-blog',
         ],
         [
-            'text'        => 'Снять позиции',
-            'url'         => 'test',
-            'icon'        => 'file',
+            'text' => 'Робот-парсер',
 
+            'icon' => 'android',
+
+            'label_color' => 'success',
+            'submenu' => [
+                [
+                    'text' => 'Список заданий',
+                    'url' => '/robot/form',
+                    'icon' => 'plus',
+                ],
+                [
+                    'text' => 'Создать задание',
+                    'url' => '/robot/form',
+                    'icon' => 'plus',
+                ]
+            ]
+        ],
+        [
+            'text' => 'Показать позиции',
+            'url' => 'cat',
+            'icon' => 'file',
             'label_color' => 'success',
         ],
         [
-            'text'        => 'Показать шаблоны',
-            'url'         => 'templates',
-            'icon'        => 'file',
-
+            'text' => 'Настройки',
+            'url' => 'cat',
+            'icon' => 'cogs',
             'label_color' => 'success',
+            'submenu' => [
+                [
+                    'text' => 'Геолокация',
+                    'icon' => 'map-marker',
+                    'submenu' => [
+                        [
+                            'text' => 'Список городов',
+                            'url' => 'config/cities',
+                            'icon' => 'building'
+                        ],
+                        [
+                            'text' => 'Список регионов',
+                            'url' => 'config/regions',
+                            'icon' => 'map'
+                        ],
+                        [
+                            'text' => 'Список стран',
+                            'url' => 'config/country',
+                            'icon' => 'globe'
+                        ]
+                    ]
+                ],
+
+            ]
         ],
         [
-            'text'        => 'Дочерние сайты',
-            'url'         => 'daughters',
-            'icon'        => 'female',
-
+            'text' => 'Дочерние сайты',
+            'url' => 'daughters',
+            'icon' => 'female',
             'label_color' => 'success',
+            'submenu' => [
+                [
+                    'text' => 'Список дочек',
+                    'url' => 'daughters',
+                    'icon' => 'bars'
+                ],
+                [
+                    'text' => 'Добавить новую',
+                    'url' => '/daughters/add',
+                    'icon' => 'plus'
+                ],
+            ]
+
         ],
 
 
@@ -172,8 +225,8 @@ return [
 
     'plugins' => [
         'datatables' => true,
-        'select2'    => true,
-        'chartjs'    => true,
+        'select2' => true,
+        'chartjs' => true,
         'texteditor' => true,
     ],
 ];

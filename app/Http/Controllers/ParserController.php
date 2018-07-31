@@ -15,10 +15,17 @@ namespace App\Http\Controllers;
 use App\Cats;
 use App\Cats__Objects;
 use App\Cities;
+use App\Country;
 use App\Objects;
 use App\Photos;
+use App\Regions;
 use App\Reviews;
+use App\Task;
+use Barryvdh\Debugbar\Facade as Debugbar;
 use Illuminate\Http\Request;
+use Illuminate\Console\Command;
+use Artisan;
+
 
 class ParserController extends Controller
 {
@@ -27,12 +34,136 @@ class ParserController extends Controller
     {
         /* Ключ Google Maps */
 
-        $this->key = 'AIzaSyDvtBNEDFJYw5mbc8zUQx4Q0CS-o6vxc70';
+        $this->key = 'AIzaSyC-t61oRRQqtU0pX7mHJ-Vgoowqnvxvq0w';
     }
 
     public function test()
     {
-        return view('form');
+        $Countries = Country::orderBy('name')->get();
+        $Cats = Cats::orderBy('_id')->get();
+        Debugbar::info($Countries);
+        return view('form')->with(
+            [
+                'country' => $Countries,
+                'cats' => $Cats
+            ]
+        );
+    }
+    public function tasks() {
+        $Task = Task::with('citys')->with('cats')->with('countries')->paginate(200);
+        return view('tasks/index')->with(['data' => $Task]);
+
+    }
+    public function run_task($id) {
+        dump($id);
+        $Task = Task::with('citys')->with('cats')->find($id);
+        dump($Task);
+
+        Artisan::call('run:task', ['city' => $Task->citys['name'], 'cat' => $Task->cats['name']]);
+
+
+    }
+
+    public function show_tasks (Request $request) {
+        $Task = Task::with('citys')->with('cats')->with('countries')->paginate(200);
+        dump($Task);
+    }
+    public function create_task(Request $request)
+    {
+        $Cities = Cities::with('countries')->with('regions')->where(['country_id' => $request->country])->take(5)->get();
+
+
+        foreach ($request->cat as $cat) {
+            foreach ($Cities as $c) {
+                $final['_id'] = $c->id;
+                $final['city_name'] = $c->name;
+                $final['region_name'] = $c->regions['name'];
+                $final['country_name'] = $c->countries['name'];
+                $Cats = Cats::where(['_id' => $cat])->first();
+
+                $final['cat'] = $Cats->name;
+
+                $Tasks = Task::firstOrCreate([
+                    'name' => $c->name." : ".$Cats->name,
+                    'country' =>$c->countries['_id'],
+                    'region' => $c->regions['_id'],
+                    'city' => $c->_id,
+                    'categorie' => $Cats->_id,
+                    'reviews_count' => $request->reviews,
+                    'photos_count' => $request->photos,
+                    ]);
+
+                Debugbar::info($Tasks);
+                if(!isset($Tasks->status) && is_null($Tasks->status)) {
+                    $Tasks->status = 'readyforimport';
+                    $Tasks->save();
+
+                    $final['status'] = 'not import';
+
+                } else {
+                    $final['status'] = 'Imported';
+                }
+
+                $fin[] = $final;
+
+            }
+        }
+
+        Debugbar::info($fin);
+        echo json_encode($fin);
+
+    }
+
+    public function postRegions(Request $request)
+    {
+
+        $Regions = Regions::where(['country_id' => $request->country])->get();
+        //dump($Regions);
+        foreach ($Regions as $r) {
+            $final['_id'] = $r->region_id;
+            $final['_name'] = $r->name;
+            $fin[$r->region_id] = $r->en_name;
+        }
+        echo json_encode($fin);
+    }
+
+    public function postCities(Request $request)
+    {
+
+
+        $Regions = Cities::where(['regiod_id' => $request->country])->orderBy('name')->get();
+        //dump($Regions);
+        foreach ($Regions as $r) {
+            $fin[$r->city_id] = $r->name;
+        }
+        Debugbar::info($fin);
+
+        echo json_encode($fin);
+    }
+
+    public function getCities()
+    {
+
+        $Regions = Cities::where(['regiod_id' => '1004118'])->get();
+        // dump($Regions);
+        foreach ($Regions as $r) {
+            $fin[$r->city_id] = $r->name;
+        }
+        echo json_encode($fin);
+    }
+
+    public function getRegions()
+    {
+
+        $Regions = Regions::where(['country_id' => '1'])->get();
+        //dump($Regions);
+        foreach ($Regions as $r) {
+            $final['_id'] = $r->region_id;
+            $final['_name'] = iconv("ISO-8859-1", "UTF-8", $r->name);
+            $fin[$r->region_id] = $r->en_name;
+        }
+        dump($fin);
+        echo json_encode([$fin], JSON_UNESCAPED_UNICODE);
     }
 
     /*
@@ -52,11 +183,10 @@ class ParserController extends Controller
         * Получаем координаты по названию города
         */
         $options = array(
-            "http"=>array(
-                "header"=>"User-Agent: Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.102011-10-16 20:23:10\r\n" // i.e. An iPad
+            "http" => array(
+                "header" => "User-Agent: Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.102011-10-16 20:23:10\r\n" // i.e. An iPad
             )
         );
-
 
 
         $city_url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?key=' . $this->key . '&query=' . urlencode($city);
@@ -81,8 +211,8 @@ class ParserController extends Controller
 
         /* Собираем до 200 позиций по координатам */
         $options = array(
-            "http"=>array(
-                "header"=>"User-Agent: Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.102011-10-16 20:23:10\r\n" // i.e. An iPad
+            "http" => array(
+                "header" => "User-Agent: Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.102011-10-16 20:23:10\r\n" // i.e. An iPad
             )
         );
 
@@ -94,7 +224,7 @@ class ParserController extends Controller
 
         $result['farray'] = $res->results;
         $result['id_city'] = $City->id;
-        echo json_encode($result);
+        return $result;
     }
 
     /*

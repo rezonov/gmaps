@@ -8,30 +8,42 @@
 
 @section('content')
     <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header with-border">
+
+                    </div>
+                    <div class="box-body">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            @foreach ($data as $d)
+                                <tr>
+                                    <td><a href="/object/{!! $d->id !!}">{!! $d->name !!}</a></td>
+                                    <td>
+                                        <button class="btn-primary deleteProduct" data-id="{{ $d->id }}"
+                                                data-token="{{ csrf_token() }}">Delete Task
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            @endforeach
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="box">
-            <table id="example2" class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>Название</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
 
-                    @foreach ($data as $d)
-                        <tr>
-                            <td><a href="/object/{!! $d->id !!}">{!! $d->name !!}</a></td>
-                            <td>
-                                <button class="btn-primary deleteProduct" data-id="{{ $d->id }}"
-                                        data-token="{{ csrf_token() }}">Delete Task
-                                </button>
-                            </td>
-                        </tr>
-
-                    @endforeach
-
-                </tbody>
-            </table>
         </div>
     </div>
 
