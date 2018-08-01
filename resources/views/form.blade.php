@@ -20,7 +20,17 @@
                         <div class="row">
                             <div class="col-md-12">
 
+                                <div class="form-group col-md-12">
 
+                                    <label for="name">Дочерний сайт:</label>
+
+                                    <select class="form-control js-example-basic-multiple" id="daughters" name="daughters">
+                                        @foreach ($daughters as $d)
+                                            <option value="{!! $d->_id !!}">{!! $d->name !!}</option>
+
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class="form-group col-md-12">
 
                                     <label for="name">Страна:</label>
@@ -95,6 +105,7 @@
                                     <thead>
                                     <tr>
                                         <th width="3px">#</th>
+                                        <th>Дочерний сайт</th>
                                         <th>Город</th>
                                         <th>Регион</th>
                                         <th>Страна</th>
@@ -131,11 +142,12 @@
                     var cat = $("#cat").val();
                     var reviews = $('#reviews').val();
                     var photos = $('#photos').val();
+                    var daughters = $('#daughters').val();
                     $.ajax({
 
                         url: '{{ route('robot.create_task') }}',
                         type: "POST",
-                        data: {'country': country, 'cat': cat, 'reviews': reviews, 'photos': photos},
+                        data: {'country': country, 'cat': cat, 'reviews': reviews, 'photos': photos, 'daughter':daughters},
                         headers: {
 
                             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
@@ -150,6 +162,7 @@
                             $.each(data2, function (index, value) {
                                 var html = '<tr>' +
                                     '<td>' + index + '</td>' +
+                                    '<td>' + value.daughter + '</td>' +
                                     '<td>' + value.city_name + '</td>' +
                                     '<td>' + value.region_name + '</td>' +
                                     '<td>' + value.country_name + '</td>' +

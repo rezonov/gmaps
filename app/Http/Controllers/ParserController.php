@@ -16,6 +16,7 @@ use App\Cats;
 use App\Cats__Objects;
 use App\Cities;
 use App\Country;
+use App\Daughters;
 use App\Objects;
 use App\Photos;
 use App\Regions;
@@ -41,11 +42,13 @@ class ParserController extends Controller
     {
         $Countries = Country::orderBy('name')->get();
         $Cats = Cats::orderBy('_id')->get();
+        $Daughters = Daughters::orderby('name')->get();
         Debugbar::info($Countries);
         return view('form')->with(
             [
                 'country' => $Countries,
-                'cats' => $Cats
+                'cats' => $Cats,
+                'daughters' => $Daughters,
             ]
         );
     }
@@ -79,6 +82,7 @@ class ParserController extends Controller
                 $final['city_name'] = $c->name;
                 $final['region_name'] = $c->regions['name'];
                 $final['country_name'] = $c->countries['name'];
+                $final['daughter'] = $request->daughter;
                 $Cats = Cats::where(['_id' => $cat])->first();
 
                 $final['cat'] = $Cats->name;
@@ -91,6 +95,7 @@ class ParserController extends Controller
                     'categorie' => $Cats->_id,
                     'reviews_count' => $request->reviews,
                     'photos_count' => $request->photos,
+                    'daughter' => $request->daughter,
                     ]);
 
                 Debugbar::info($Tasks);

@@ -21,7 +21,10 @@ class Cities extends Eloquent
         return $this->belongsTo(Regions::class, 'regiod_id', 'region_id');
     }
 
-    protected $fillable = ['name'];
+    public function cities_daughters() {
+        return $this->belongsTo(Daughters_Cities::class, 'id_city', '_id');
+    }
+    protected $fillable = ['name', 'daughters'];
 
     public function ImportFromFile()
     {

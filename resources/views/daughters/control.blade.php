@@ -31,19 +31,6 @@
 
                     <div class="box-body">
 
-                        <a class="btn btn-app btn-xs" href="/daughters/{!! $d->id !!}/template/main"><i class="fa fa-edit"></i>
-                           Главная
-                        </a>
-
-                        <a class="btn btn-app btn-xs" href="/daughters/{!! $d->id !!}/template/state"><i class="fa fa-edit"></i>
-                            Штат
-                        </a>
-                        <a class="btn btn-app" href="/daughters/{!! $d->id !!}/template/city"><i class="fa fa-eye"></i>
-                            Город
-                        </a>
-                        <a class="btn btn-app btn-xs" href="/daughters/{!! $d->id !!}/template/category"><i class="fa fa-edit"></i>
-                            Категория
-                        </a>
                         <a class="btn btn-app btn-xs" href="/daughters/{!! $d->id !!}/template/company"><i class="fa fa-edit"></i>
                             Компания
                         </a>
@@ -52,29 +39,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">{{$d->name}}</h3>
-                    </div>
 
-                    <div class="box-body">
-
-                        <a class="btn btn-app btn-xs" href="/daughters/edit/{!! $d->id !!}"><i class="fa fa-edit"></i>
-                            Шаблоны
-                        </a>
-
-                        <a class="btn btn-app" href="/daughters/control/{!! $d->id !!}"><i class="fa fa-eye"></i>
-                            Категории
-                        </a>
-                        <a class="btn btn-app btn-xs" href="/daughters/edit/{!! $d->id !!}"><i class="fa fa-edit"></i>
-                            Города
-                        </a>
-
-
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 

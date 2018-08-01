@@ -32,7 +32,7 @@
                                 <input type="hidden" name="template" value="{!! $template !!}"/>
                                 @extends('templates.editor')
                                 <textarea name="content">
-        @if(isset($data))
+            @if(isset($data))
                                         {!! $data !!}
                                     @endif
     </textarea>
@@ -42,14 +42,9 @@
                                     $('textarea').ckeditor();
                                     // $('.textarea').ckeditor(); // if class is prefered.
                                 </script>
-                                <div class="form-control">
-                                    <select>
-                                        @foreach($pages as $p)
-                                            <option value="{!! $p->id !!}">{!! $p->title->rendered !!}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+
                                 <div class="box-footer">
+
                                     <button type="submit" class="btn btn-primary">Сохранить</button>
                                 </div>
                             </form>
@@ -62,7 +57,11 @@
 
                         <div class="box-body with-border">
 
-
+                            <ul>
+                                <li>%%hours%% = Часы работы</li>
+                                <li>%%website%% = Сайт</li>
+                                <li>%%phone%% = Телефон</li>
+                                <li>%%address%% = Адрес</li>
 
                         </div>
                     </div>
