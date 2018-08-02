@@ -47,7 +47,7 @@
                                         <span class="label label-primary">{!! $Task->status !!}</span>
                                     </td>
                                     <td>
-                                        {!! $Task->cats['name'] !!}
+                                        {!! $Task->categorie !!}
                                     </td>
                                     <td>
                                         {!! $Task->countries['name'] !!}

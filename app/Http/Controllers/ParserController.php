@@ -17,6 +17,7 @@ use App\Cats__Objects;
 use App\Cities;
 use App\Country;
 use App\Daughters;
+use App\Daughters_Cats;
 use App\Objects;
 use App\Photos;
 use App\Regions;
@@ -54,6 +55,7 @@ class ParserController extends Controller
     }
     public function tasks() {
         $Task = Task::with('citys')->with('cats')->with('countries')->paginate(200);
+        Debugbar::info($Task);
         return view('tasks/index')->with(['data' => $Task]);
 
     }
@@ -74,25 +76,29 @@ class ParserController extends Controller
     public function create_task(Request $request)
     {
         $Cities = Cities::with('countries')->with('regions')->where(['country_id' => $request->country])->take(5)->get();
+        $Cats = Cats::firstOrcreate(['name' => $request->cat]);
+        $Cats->name = $request->cat;
+        $Cats->save();
 
 
-        foreach ($request->cat as $cat) {
+        $CD = Daughters_Cats::firstorcreate(['id_daughter' => $request->daughter, 'id_cat' => $Cats->id]);
+
             foreach ($Cities as $c) {
                 $final['_id'] = $c->id;
                 $final['city_name'] = $c->name;
                 $final['region_name'] = $c->regions['name'];
                 $final['country_name'] = $c->countries['name'];
                 $final['daughter'] = $request->daughter;
-                $Cats = Cats::where(['_id' => $cat])->first();
 
-                $final['cat'] = $Cats->name;
+
+                $final['cat'] = $request->cat;
 
                 $Tasks = Task::firstOrCreate([
-                    'name' => $c->name." : ".$Cats->name,
+                    'name' => $c->name." : ".$request->cat,
                     'country' =>$c->countries['_id'],
                     'region' => $c->regions['_id'],
                     'city' => $c->_id,
-                    'categorie' => $Cats->_id,
+                    'categorie' => $Cats->id,
                     'reviews_count' => $request->reviews,
                     'photos_count' => $request->photos,
                     'daughter' => $request->daughter,
@@ -112,7 +118,6 @@ class ParserController extends Controller
                 $fin[] = $final;
 
             }
-        }
 
         Debugbar::info($fin);
         echo json_encode($fin);

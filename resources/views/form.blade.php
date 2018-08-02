@@ -60,7 +60,8 @@
                                     </div>-->
                                 <div class="form-group col-md-12">
                                     <label for="cat">Категория</label>
-                                    <select class="form-control" name="cat" id="cat" multiple="multiple">
+                                    <input type="text" class="form-control" name="cat" value="" id="cat"  placeholder="Категория"/>
+                               <!--     <select class="form-control" name="cat" id="cat" multiple="multiple">
                                         <option value="all">Все </option>
                                         @foreach ($cats as $c)
 
@@ -75,7 +76,7 @@
                                             </option>
 
                                         @endforeach
-                                    </select>
+                                    </select>-->
                                     </label>
 
                                 </div>
@@ -140,6 +141,7 @@
 
                     var country = $("#country").val();
                     var cat = $("#cat").val();
+                    console.log(cat);
                     var reviews = $('#reviews').val();
                     var photos = $('#photos').val();
                     var daughters = $('#daughters').val();

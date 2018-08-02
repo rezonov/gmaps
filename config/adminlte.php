@@ -123,7 +123,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Список заданий',
-                    'url' => '/robot/form',
+                    'url' => '/robot/',
                     'icon' => 'plus',
                 ],
                 [
